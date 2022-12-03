@@ -4,19 +4,15 @@ import Favicon from 'react-favicon'
 import FadeReplace from './FadeReplace';
 
 class EmojiBar extends React.Component {
-  constructor(props) {
-    super(props)
-  }
-
   render() {
     console.log(this.props)
 
     let spans = []
+    spans.push(<EmojiSpan key={-1} show={true} emoji='' text='' />)
 
     for (const i in this.props.value) {
       const value = this.props.value[i]
-      spans.push(<EmojiSpan key={2 * i} show={value.show} handle_click={value.handle_click} emoji={value.emoji} text={value.text} />)
-      spans.push(<span key={2 * i + 1}> </span>)
+      spans.push(<EmojiSpan key={i} show={value.show} handle_click={value.handle_click} emoji={value.emoji} text={value.text} />)
     }
 
     return (

@@ -1,12 +1,19 @@
 #app {
   height: 100vh;
   width: 100vw;
-  background-image: linear-gradient(to right top, #249dcd, #258cb5, #267c9d, #266c87, #265c71);
+  background: linear-gradient(270deg, #246655, #32b291, #32b242, #20a9dd, #0b536e, #6d0b6e, #c31818, #a418c3, #182bc3);
+  background-size: 1800% 1800%;
+  /* animation: background-position 10s ease; */
+  transition: .5s;
   color: white;
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 5fr 1fr;
 }
+
+/* #app:hover {
+  background-position: 10% 20%;
+} */
 
 #emoji_bar {
   grid-column-start: 1;

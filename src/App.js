@@ -9,7 +9,7 @@ class App extends React.Component {
     super(props);
 
     this.state = {seen: []}
-    for (const i in props.data) {
+    for (const _ in props.data) {
       this.state.seen.push(false)
     }
 
@@ -56,19 +56,20 @@ class App extends React.Component {
       }
     }
 
-    console.log(unseen_indices)
-
     if (unseen_indices.length === 0) {
-      return {
-        finished: true
+      const seen = []
+      for (const _ in props.data) {
+        seen.push(false)
       }
+
+      const next_index = rand(props.data.length)
+
+      return this.getState({...state, seen: seen}, props, next_index, false)
+    } else {
+      const next_index = unseen_indices[rand(unseen_indices.length)]
+
+      return this.getState(state, props, next_index, false)
     }
-
-    const next_index = unseen_indices[rand(unseen_indices.length)]
-
-    console.log(next_index)
-
-    return this.getState(state, props, next_index, false)
   }
 
   render() {
@@ -82,17 +83,8 @@ class App extends React.Component {
       this.setState(this.getNextState)
     }
 
-    if (this.state.finished) {
-      return (
-        <div id="app">
-          <div id="emoji_bar">
-            Congratulations! All done!
-          </div>
-        </div>
-      )
-    }
 
-    return <div id="app">
+  return <div id="app" style={{backgroundPosition: `${(this.state.current % 11) * 10}% ${(this.state.current * 7 % 11) * 10}%` }}>
       <div id="emoji_bar">
         <EmojiBar index={this.state.current} value={this.state.data.value} />
       </div>
