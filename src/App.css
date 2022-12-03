@@ -14,27 +14,11 @@
 }
 
 #emoji_bar, #show_all, #next {
-  cursor: pointer;
-
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-*[action='wobble'] {
-  animation: wobble 0.2s ease 0s 1 normal forwards;
-}
-
-@keyframes wobble {
-	0% {
-		transform: scale(1);
-	}
-
-	50% {
-		transform: scale(1.1);
-	}
-
-	100% {
-		transform: scale(1);
-	}
+#show_all, #next {
+  cursor: pointer;
 }

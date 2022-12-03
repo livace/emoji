@@ -1,7 +1,7 @@
 import React from 'react';
 import EmojiSpan from './EmojiSpan';
 import Favicon from 'react-favicon'
-import { SwitchTransition } from 'react-transition-group'
+import FadeReplace from './FadeReplace';
 
 class EmojiBar extends React.Component {
   constructor(props) {
@@ -20,10 +20,10 @@ class EmojiBar extends React.Component {
     }
 
     return (
-      <div>
+      <FadeReplace animationKey={this.props.index}>
         <Favicon url={`data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>${this.props.value[0].emoji}</text></svg>`} />
         {spans}
-      </div>
+      </FadeReplace>
     )
   }
 }
