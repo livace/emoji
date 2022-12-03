@@ -1,7 +1,8 @@
 import React from 'react';
 import EmojiBar from './components/EmojiBar';
+import Wobble from './components/Wobble';
 import './App.css';
-import rand from './util/rand.js'
+import rand from './util/rand'
 
 class App extends React.Component {
   constructor(props) {
@@ -93,11 +94,11 @@ class App extends React.Component {
 
     return <div id="app">
       <div id="emoji_bar">
-        <EmojiBar value={this.state.data.value} />
+        <EmojiBar index={this.state.current} value={this.state.data.value} />
       </div>
 
-      <div id="show_all" onClick={show_all}>👁️</div>
-      <div id="next" onClick={next}>➡️</div>
+      <div className='small_button' id="show_all" onClick={show_all}><Wobble>👁️</Wobble></div>
+      <div className='small_button' id="next" onClick={next}><Wobble>➡️</Wobble></div>
     </div>
   }
 }
