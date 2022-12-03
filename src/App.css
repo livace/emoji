@@ -1,7 +1,8 @@
 #app {
   height: 100vh;
   width: 100vw;
-  background: green;
+  background-image: linear-gradient(to right top, #249dcd, #258cb5, #267c9d, #266c87, #265c71);
+  color: white;
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 5fr 1fr;
@@ -9,5 +10,13 @@
 
 #emoji_bar {
   grid-column-start: 1;
-  grid-column-end: 2;
+  grid-column-end: 3;
+}
+
+#emoji_bar, #show_all, #next {
+  cursor: pointer;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

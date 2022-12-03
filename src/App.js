@@ -1,28 +1,79 @@
 import React from 'react';
 import EmojiBar from './components/EmojiBar';
 import './App.css';
+import rand from './util/rand.js'
 
 class App extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = this.getNextState({current: -1}, props)
+    this.state = {seen: []}
+    for (const i in props.data) {
+      this.state.seen.push(false)
+    }
+
+    this.state = this.getNextState(this.state, props)
+  }
+
+  getState(state, props, index, show_all) {
+    const data = { ...props.data[index] }
+    data.value = { ...data.value }
+    for (const i in data.value) {
+      const value = { ...data.value[i] }
+      value.show = show_all
+      value.handle_click = () => {
+        this.setState((state) => {
+          const data = { ...state.data }
+          data.value[i] = { ...data.value[i] }
+          data.value[i].show = !data.value[i].show
+
+          return { data: data }
+        })
+      }
+
+      data.value[i] = value
+    }
+
+    const seen = [...state.seen]
+    seen[index] = true
+
+    return {
+      data: data,
+      current: index,
+      seen: seen
+    }
   }
 
   getNextState(state, props) {
-    const next_index = (state.current + 1) % props.data.length
+    const unseen_indices = []
 
-    return {
-      show_all: false,
-      data: props.data[next_index],
-      current: next_index
+    console.log(state)
+
+    for (const i in state.seen) {
+      if (!state.seen[i]) {
+        unseen_indices.push(i)
+      }
     }
+
+    console.log(unseen_indices)
+
+    if (unseen_indices.length === 0) {
+      return {
+        finished: true
+      }
+    }
+
+    const next_index = unseen_indices[rand(unseen_indices.length)]
+
+    console.log(next_index)
+
+    return this.getState(state, props, next_index, false)
   }
 
   render() {
     const show_all = () => {
-      this.setState({
-        show_all: true
+      this.setState((state, props) => {
+        return this.getState(state, props, state.current, true)
       })
     }
 
@@ -30,8 +81,20 @@ class App extends React.Component {
       this.setState(this.getNextState)
     }
 
+    if (this.state.finished) {
+      return (
+        <div id="app">
+          <div id="emoji_bar">
+            Congratulations! All done!
+          </div>
+        </div>
+      )
+    }
+
     return <div id="app">
-      <EmojiBar show_all={this.state.show_all} value={this.state.data.value} />
+      <div id="emoji_bar">
+        <EmojiBar value={this.state.data.value} />
+      </div>
 
       <div id="show_all" onClick={show_all}>👁️</div>
       <div id="next" onClick={next}>➡️</div>
