@@ -4,7 +4,7 @@ const data = [
   ["💭 👤 🚫|👧|💕|🌸 ", "Незабудка|твой|любимый|цветок"],
   ["🥂|👄|🍼", "Dom Pérignon|во рту держишь,|как соску"],
   ["👧|👭|💚|👨|🚘", "Твои|подружки|хотят|ко мне|в Панамеру"],
-  ["🎎📐|👧", "Barbiesize girl"],
+  ["🎎 📐|👧", "Barbiesize girl"],
   ["👨|1️⃣ 🕒", "Я|в моменте"],
   ["🔛|🥃|🔹|👥|🕺|🤏", "На|баре|синие|мы|танцуем|под минимал"]
 ]
@@ -15,7 +15,6 @@ const loadData = () => {
   for (const line of data) {
     const [emoji, text] = line
     const all_emoji = emoji.split('|')
-    console.log(all_emoji)
     const all_text = text.split('|')
 
     const values = []
@@ -28,8 +27,6 @@ const loadData = () => {
 
     result.push({value: values})
   }
-
-  console.log(result)
 
   return result;
 }

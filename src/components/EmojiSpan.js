@@ -3,7 +3,6 @@ import './EmojiSpan.css'
 
 class EmojiSpan extends React.Component {
   render() {
-    console.log(this.props)
     return (
       <div className='emoji-container'>
         <div className={`text ${(!this.props.show && 'hide') || ''}`}>

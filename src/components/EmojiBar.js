@@ -5,8 +5,6 @@ import FadeReplace from './FadeReplace';
 
 class EmojiBar extends React.Component {
   render() {
-    console.log(this.props)
-
     let spans = []
     spans.push(<EmojiSpan key={-1} show={true} emoji='' text='' />)
 

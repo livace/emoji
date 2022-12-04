@@ -8,7 +8,11 @@ class App extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {seen: []}
+    this.state = {
+      seen: [],
+      iteration: rand(11)
+    }
+
     for (const _ in props.data) {
       this.state.seen.push(false)
     }
@@ -41,14 +45,13 @@ class App extends React.Component {
     return {
       data: data,
       current: index,
-      seen: seen
+      seen: seen,
+      iteration: state.iteration + 1
     }
   }
 
   getNextState(state, props) {
     const unseen_indices = []
-
-    console.log(state)
 
     for (const i in state.seen) {
       if (!state.seen[i]) {
@@ -84,14 +87,19 @@ class App extends React.Component {
     }
 
 
-  return <div id="app" style={{backgroundPosition: `${(this.state.current % 11) * 10}% ${(this.state.current * 7 % 11) * 10}%` }}>
-      <div id="emoji_bar">
-        <EmojiBar index={this.state.current} value={this.state.data.value} />
-      </div>
+    const background_x = (Math.sin(this.state.iteration / 2) + 1) * 50
+    const background_y = (Math.cos(this.state.iteration / 2) + 1) * 50
 
-      <div className='small_button' id="show_all" onClick={show_all}><Wobble>👁️</Wobble></div>
-      <div className='small_button' id="next" onClick={next}><Wobble>➡️</Wobble></div>
-    </div>
+    return (
+      <div id="app" style={{backgroundPosition: `${background_x}% ${background_y}%` }}>
+        <div id="emoji_bar">
+          <EmojiBar index={this.state.current} value={this.state.data.value} />
+        </div>
+
+        <div className='small_button' id="show_all" onClick={show_all}><Wobble>👁️</Wobble></div>
+        <div className='small_button' id="next" onClick={next}><Wobble>➡️</Wobble></div>
+      </div>
+    )
   }
 }
 
