@@ -1,0 +1,22 @@
+.emoji-container {
+  display: inline-block;
+}
+
+.emoji-container > * {
+  text-align: center;
+}
+
+.emoji-container > .text {
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.emoji-container > .hide {
+  max-width: 0;
+}
+
+.emoji {
+  cursor: pointer;
+}
+

@@ -1,0 +1,33 @@
+.animation-container {
+  display: inline-block;
+}
+
+*[action='fade-out'] {
+  animation: fade-in-2 0.2s ease 0s 1 reverse forwards;
+}
+
+*[action='fade-in'] {
+  animation: fade-in 0.2s ease 0s 1 normal forwards;
+}
+
+@keyframes fade-in {
+	0% {
+		transform: scale(0);
+	}
+
+	100% {
+		transform: scale(1);
+	}
+}
+
+@keyframes fade-in-2 {
+	0% {
+		transform: scale(0);
+    /* width: 0%; */
+	}
+
+	100% {
+		transform: scale(1);
+    /* width: 100%; */
+	}
+}
