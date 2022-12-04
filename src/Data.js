@@ -25,7 +25,7 @@ const loadData = () => {
       })
     })
 
-    result.push({value: values})
+    result.push({value: [...values]})
   }
 
   return result;

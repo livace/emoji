@@ -22,11 +22,12 @@ class App extends React.Component {
   }
 
   getState(props, index, show_all) {
+    console.log(index)
     const data = { ...props.data[index] }
-    data.value = { ...data.value }
+    data.value = [ ...data.value ]
     for (const i in data.value) {
       const value = { ...data.value[i] }
-      value.show = value.show || show_all
+      value.show = show_all
       value.handle_click = () => {
         this.updateCurrentState((state) => {
           const data = { ...state.data }
@@ -56,7 +57,7 @@ class App extends React.Component {
     }
 
     if (unseen_indices.length === 0) {
-      return NaN;
+      return -1;
     } else {
       return unseen_indices[rand(unseen_indices.length)]
     }
@@ -80,9 +81,9 @@ class App extends React.Component {
   getNewState(state, props) {
     const all_states = [ ...state.states ]
 
-    const seen = [ ...state.seen ]
+    let seen = [ ...state.seen ]
     let next_index = this.selectUnseen(seen)
-    if (next_index === NaN) {
+    if (next_index === -1) {
       seen = seen.map(() => { return false })
       next_index = this.selectUnseen(seen)
     }
@@ -102,25 +103,28 @@ class App extends React.Component {
   }
 
   updateIteration(diff) {
-    this.setState((state) => {
+    this.setState((state, props) => {
       const new_iteration = state.iteration + diff
 
       if (new_iteration < 0) {
         return;
       } else if (new_iteration === state.states.length) {
-        this.pushNewState()
+        return this.getNewState(state, props)
       } else {
-        this.setState({
+        return {
           iteration: new_iteration
-        })
+        }
       }
     })
   }
 
   render() {
+    console.log(this.state)
     const show_all = () => {
       this.updateCurrentState((state, props) => {
-        return this.getState(props, state.current, true)
+        return this.getState(props, state.current, !state.data.value.every((value) => {
+          return value.show
+        }))
       })
     }
 
