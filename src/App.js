@@ -10,7 +10,8 @@ class App extends React.Component {
 
     this.state = {
       seen: [],
-      iteration: rand(11)
+      iteration: rand(11),
+      valid: false
     }
 
     for (const _ in props.data) {
@@ -20,7 +21,7 @@ class App extends React.Component {
     this.state = this.getNextState(this.state, props)
   }
 
-  getState(state, props, index, show_all) {
+  getState(state, props, index, show_all, iteration) {
     const data = { ...props.data[index] }
     data.value = { ...data.value }
     for (const i in data.value) {
@@ -46,7 +47,9 @@ class App extends React.Component {
       data: data,
       current: index,
       seen: seen,
-      iteration: state.iteration + 1
+      valid: true,
+      prevState: state,
+      iteration: iteration
     }
   }
 
@@ -67,18 +70,18 @@ class App extends React.Component {
 
       const next_index = rand(props.data.length)
 
-      return this.getState({...state, seen: seen}, props, next_index, false)
+      return this.getState({...state, seen: seen}, props, next_index, false, state.iteration + 1)
     } else {
       const next_index = unseen_indices[rand(unseen_indices.length)]
 
-      return this.getState(state, props, next_index, false)
+      return this.getState(state, props, next_index, false, state.iteration + 1)
     }
   }
 
   render() {
     const show_all = () => {
       this.setState((state, props) => {
-        return this.getState(state, props, state.current, true)
+        return this.getState(state, props, state.current, true, state.iteration)
       })
     }
 
@@ -96,8 +99,8 @@ class App extends React.Component {
           <EmojiBar index={this.state.current} value={this.state.data.value} />
         </div>
 
-        <div className='small_button' id="show_all" onClick={show_all}><Wobble>👁️</Wobble></div>
-        <div className='small_button' id="next" onClick={next}><Wobble>➡️</Wobble></div>
+        <Wobble><div className='small_button' id="show_all" onClick={show_all}>👁️</div></Wobble>
+        <Wobble><div className='small_button' id="next" onClick={next}>➡️</div></Wobble>
       </div>
     )
   }

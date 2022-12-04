@@ -14,7 +14,7 @@
     #182bc3
   );
   background-size: 1800% 1800%;
-  transition: .5s;
+  transition: 5s;
   color: white;
   display: grid;
   grid-template-columns: 1fr 1fr;
