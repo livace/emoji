@@ -12,17 +12,20 @@ class App extends React.Component {
       seen: [],
       iteration: 0,
       states: [],
+      offset: rand(10000)
     }
 
     for (const _ in props.data) {
       this.state.seen.push(false)
     }
 
-    this.state = this.getNewState(this.state, props)
+    this.state = {
+      ...this.state,
+      ...this.getNewState(this.state, props)
+    }
   }
 
   getState(props, index, show_all) {
-    console.log(index)
     const data = { ...props.data[index] }
     data.value = [ ...data.value ]
     for (const i in data.value) {
@@ -119,7 +122,6 @@ class App extends React.Component {
   }
 
   render() {
-    console.log(this.state)
     const show_all = () => {
       this.updateCurrentState((state, props) => {
         return this.getState(props, state.current, !state.data.value.every((value) => {
@@ -136,10 +138,8 @@ class App extends React.Component {
       this.updateIteration(-1)
     }
 
-    const offset = rand(100)
-
-    const background_x = (Math.sin(offset + this.state.iteration / 2) + 1) * 50
-    const background_y = (Math.cos(offset + this.state.iteration / 2) + 1) * 50
+    const background_x = (Math.sin(this.state.offset + this.state.iteration / 2) + 1) * 50
+    const background_y = (Math.cos(this.state.offset + this.state.iteration / 2) + 1) * 50
 
     const state = this.state.states[this.state.iteration]
 
