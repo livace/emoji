@@ -17,21 +17,21 @@
   transition: 5s;
   color: white;
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
   grid-template-rows: 5fr 1fr;
 }
 
 #emoji_bar {
   grid-column-start: 1;
-  grid-column-end: 3;
+  grid-column-end: 4;
 }
 
-#emoji_bar, #show_all, #next {
+#emoji_bar, .small_button {
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-#show_all, #next {
+.small_button {
   cursor: pointer;
 }

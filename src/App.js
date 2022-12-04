@@ -10,25 +10,25 @@ class App extends React.Component {
 
     this.state = {
       seen: [],
-      iteration: rand(11),
-      valid: false
+      iteration: 0,
+      states: [],
     }
 
     for (const _ in props.data) {
       this.state.seen.push(false)
     }
 
-    this.state = this.getNextState(this.state, props)
+    this.state = this.getNewState(this.state, props)
   }
 
-  getState(state, props, index, show_all, iteration) {
+  getState(props, index, show_all) {
     const data = { ...props.data[index] }
     data.value = { ...data.value }
     for (const i in data.value) {
       const value = { ...data.value[i] }
-      value.show = show_all
+      value.show = value.show || show_all
       value.handle_click = () => {
-        this.setState((state) => {
+        this.updateCurrentState((state) => {
           const data = { ...state.data }
           data.value[i] = { ...data.value[i] }
           data.value[i].show = !data.value[i].show
@@ -40,65 +40,112 @@ class App extends React.Component {
       data.value[i] = value
     }
 
-    const seen = [...state.seen]
-    seen[index] = true
-
     return {
       data: data,
-      current: index,
-      seen: seen,
-      valid: true,
-      prevState: state,
-      iteration: iteration
+      current: index
     }
   }
 
-  getNextState(state, props) {
+  selectUnseen(seen) {
     const unseen_indices = []
 
-    for (const i in state.seen) {
-      if (!state.seen[i]) {
+    for (const i in seen) {
+      if (!seen[i]) {
         unseen_indices.push(i)
       }
     }
 
     if (unseen_indices.length === 0) {
-      const seen = []
-      for (const _ in props.data) {
-        seen.push(false)
+      return NaN;
+    } else {
+      return unseen_indices[rand(unseen_indices.length)]
+    }
+  }
+
+  updateCurrentState(fn) {
+    this.setState((state, props) => {
+      const all_states = [ ...state.states ]
+
+      all_states[state.iteration] = {
+        ...all_states[state.iteration],
+        ...fn(all_states[state.iteration], props)
       }
 
-      const next_index = rand(props.data.length)
+      return {
+        states: all_states
+      }
+    })
+  }
 
-      return this.getState({...state, seen: seen}, props, next_index, false, state.iteration + 1)
-    } else {
-      const next_index = unseen_indices[rand(unseen_indices.length)]
+  getNewState(state, props) {
+    const all_states = [ ...state.states ]
 
-      return this.getState(state, props, next_index, false, state.iteration + 1)
+    const seen = [ ...state.seen ]
+    let next_index = this.selectUnseen(seen)
+    if (next_index === NaN) {
+      seen = seen.map(() => { return false })
+      next_index = this.selectUnseen(seen)
     }
+    seen[next_index] = true
+
+    all_states.push(this.getState(props, next_index, false))
+
+    return {
+      iteration: all_states.length - 1,
+      states: all_states,
+      seen: seen
+    }
+  }
+
+  pushNewState() {
+    this.setState(this.getNewState)
+  }
+
+  updateIteration(diff) {
+    this.setState((state) => {
+      const new_iteration = state.iteration + diff
+
+      if (new_iteration < 0) {
+        return;
+      } else if (new_iteration === state.states.length) {
+        this.pushNewState()
+      } else {
+        this.setState({
+          iteration: new_iteration
+        })
+      }
+    })
   }
 
   render() {
     const show_all = () => {
-      this.setState((state, props) => {
-        return this.getState(state, props, state.current, true, state.iteration)
+      this.updateCurrentState((state, props) => {
+        return this.getState(props, state.current, true)
       })
     }
 
     const next = () => {
-      this.setState(this.getNextState)
+      this.updateIteration(1)
     }
 
+    const back = () => {
+      this.updateIteration(-1)
+    }
 
-    const background_x = (Math.sin(this.state.iteration / 2) + 1) * 50
-    const background_y = (Math.cos(this.state.iteration / 2) + 1) * 50
+    const offset = rand(100)
+
+    const background_x = (Math.sin(offset + this.state.iteration / 2) + 1) * 50
+    const background_y = (Math.cos(offset + this.state.iteration / 2) + 1) * 50
+
+    const state = this.state.states[this.state.iteration]
 
     return (
       <div id="app" style={{backgroundPosition: `${background_x}% ${background_y}%` }}>
         <div id="emoji_bar">
-          <EmojiBar index={this.state.current} value={this.state.data.value} />
+          <EmojiBar index={state.current} value={state.data.value} />
         </div>
 
+        <Wobble><div className='small_button' id="back" onClick={back}>⬅️</div></Wobble>
         <Wobble><div className='small_button' id="show_all" onClick={show_all}>👁️</div></Wobble>
         <Wobble><div className='small_button' id="next" onClick={next}>➡️</div></Wobble>
       </div>
